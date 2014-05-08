@@ -206,13 +206,12 @@ void main(void)
 		else
 		   GpioDataRegs.GPBCLEAR.bit.GPIO34 = 1;
 
-		GpioDataRegs.GPASET.bit.GPIO12 = 1;
-		sleepFunc(100000);
-		GpioDataRegs.GPACLEAR.bit.GPIO12 = 1;
+		 // Once the comparator trips we will just hang out here until we want to start over
 		if (GpioDataRegs.GPADAT.bit.GPIO1 == 0) {
 			printf("Press any key to continue: ");
 			getchar();
 		 }
+		 
 	    EALLOW;
    		EPwm1Regs.TZCLR.bit.DCAEVT2 =0xFFFF;		// Clear the DCAEVT2 flag. The flag status will be   
 		restart();
