@@ -1,0 +1,1 @@
+"C:/ti/controlSUITE/device_support/f2806x/v100/F2806x_headers/cmd/F2806x_Headers_nonBIOS.cmd" "./F2806x_GlobalVariableDefs.obj" "./F2806x_CodeStartBranch.obj" "./CompareValues-Main.obj" "./CompareValues-DevInit_F2806x.obj" "../F2806x_FLASH_CompareValues.CMD" -l"rts2800_ml.lib" 
