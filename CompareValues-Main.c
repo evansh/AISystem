@@ -65,7 +65,8 @@ void restart(void);
 // Used for running BackGround in flash and the ISR in RAM
 extern Uint16 RamfuncsLoadStart, RamfuncsLoadEnd, RamfuncsRunStart;
 
-Uint16 dac_value= 310;			// Set as ~1V initially
+// Setting really low trip level ~ 1Amp
+Uint16 dac_value= 47;			// Set as ~1V initially
 								// Internal DAC range is 0-1024 resulting 0-3.3V
 Uint16 duty_cycle_A=20;			// Set duty 50% initially, ~1.5 V
 							
@@ -180,6 +181,7 @@ void main(void)
 //=================================
 //	Forever LOOP
 //=================================
+	int needsReset = 0;
 	for(;;)  //infinite loop
 	{
 		/*
@@ -210,12 +212,17 @@ void main(void)
 		if (GpioDataRegs.GPADAT.bit.GPIO1 == 0) {
 			printf("Press any key to continue: ");
 			getchar();
+			needsReset = 1;
 		 }
 		 
 	    EALLOW;
    		EPwm1Regs.TZCLR.bit.DCAEVT2 =0xFFFF;		// Clear the DCAEVT2 flag. The flag status will be   
-		restart();
 		EDIS;										// updated in each cycle.
+
+		if (needsReset) {
+			restart();
+			needsReset = 0;
+		}
 
 		Comp1Regs.DACVAL.bit.DACVAL =dac_value;	    // Adjust (internal) DAC value
 		EPwm1Regs.CMPA.half.CMPA = duty_cycle_A;	// Adjust PWM1A-DAC output
